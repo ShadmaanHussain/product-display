@@ -3,7 +3,7 @@
 This project demonstrates a **Product Display System** with the following features:
 
 ## 🔗 Live Demo
-[View Deployment](YOUR_DEPLOYMENT_LINK_HERE)
+[View Deployment](https://product-display-hazel.vercel.app/)
 
 ## 1. Product List Display
 - Show products in **List view** (table format)  
