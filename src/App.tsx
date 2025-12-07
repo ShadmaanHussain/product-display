@@ -13,6 +13,7 @@ import {
   DialogTitle,
 } from "./components/ui/dialog";
 import productsData from "./mock/products.json";
+import ConfirmDeleteDialog from "./components/ConfirmDeleteDialog";
 
 export default function App() {
   const [products, setProducts] = useState<Product[]>(productsData);
@@ -52,6 +53,8 @@ export default function App() {
   // Form Modal
   const [editing, setEditing] = useState<Product | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   function openNew() {
     setEditing(null);
@@ -83,9 +86,15 @@ export default function App() {
     setModalOpen(false);
   }
 
-  function remove(id: number) {
-    if (confirm("Delete product?"))
-      setProducts(products.filter((p) => p.id !== id));
+  function handleConfirmDelete(id: number) {
+    setDeleteId(id);
+    setConfirmOpen(true);
+  }
+
+  function remove() {
+    setProducts(products.filter((p) => p.id !== deleteId));
+    setDeleteId(null);
+    setConfirmOpen(false);
   }
 
   return (
@@ -123,18 +132,23 @@ export default function App() {
         <ProductTable
           products={paginated}
           onEdit={openEdit}
-          onDelete={remove}
+          onDelete={handleConfirmDelete}
         />
       ) : (
         <ProductCardGrid
           products={paginated}
           onEdit={openEdit}
-          onDelete={remove}
+          onDelete={handleConfirmDelete}
         />
       )}
 
       <Pagination page={page} totalPages={totalPages} onChange={setPage} />
 
+      <ConfirmDeleteDialog
+        onConfirm={remove}
+        open={confirmOpen}
+        setOpen={setConfirmOpen}
+      />
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
         <DialogContent>
           <DialogHeader>
